@@ -1,0 +1,25 @@
+---
+
+postgresql_shared_buffers: "1GB"
+postgresql_data_checksums: true
+
+postgresql_databases:
+  - name: artifactory
+    owner: artifactory
+
+# NOTE: postgresql >= 10 does not accept unencrypted passwords
+postgresql_users:
+  - name: artifactory
+    pass: undef
+    encrypted: yes
+
+postgresql_database_schemas:
+  - database: artifactory
+    state: present
+    schema: acme
+    owner: artifactory
+
+postgresql_user_privileges:
+  - name: artifactory
+    db: artifactory
+

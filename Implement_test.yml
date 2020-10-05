@@ -1,0 +1,45 @@
+---
+- hosts: 18.208.181.238
+  become: yes
+
+  tasks:
+  - name: get package nginx version
+    yum:
+      list: nginx
+    register: package_nginx_version
+
+  - name: set package version
+    set_fact:
+      package_nginx_version: "{{ package_nginx_version.results|selectattr('yumstate')|map(attribute='version')|list}}"
+  - debug:
+      var: package_nginx_version
+
+  - name: get package postgresql version
+    yum:
+      list: postgresql
+    register: package_postgresql_version
+
+  - name: set package version
+    set_fact:
+      package_postgresql_version: "{{ package_postgresql_version.results|selectattr('yumstate')|map(attribute='version')|list}}"
+  - debug:
+      var: package_postgresql_version
+
+  - name: Check if java is installed
+    command: java -version
+    register: java_result
+    ignore_errors: True
+
+  - debug:
+      var: java_result
+
+  - name: get service facts
+    command: systemctl status "{{ item }}"
+    with_items:
+    - postgresql-11.service
+    - nginx
+    register: result
+    ignore_errors: yes
+  - name: showing report
+    debug:
+     var: result
