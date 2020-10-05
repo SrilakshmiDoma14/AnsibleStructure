@@ -1,5 +1,5 @@
 ---
-- hosts: 18.208.181.238
+- hosts: ip
   become: yes
 
   tasks:
