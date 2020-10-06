@@ -1,0 +1,67 @@
+---
+# tasks file for common-setup
+- name: Install Dependencies on RedHat OS
+  yum:
+    name: "{{item}}"
+    state: present
+  when: ansible_os_family == "RedHat"
+  loop:
+    - ntp
+    - wget
+    - unzip
+    - zip
+    - git
+
+- name: start and enable ntp
+  service:
+    name: ntpd
+    state: started
+    enabled: yes
+  when: ansible_os_family == "RedHat"
+
+- name: Install Dependencies on Debian OS
+  apt:
+    name: "{{item}}"
+    state: present
+    update_cache: yes
+  when: ansible_os_family == "Debian"
+  loop:
+    - ntp
+    - wget
+    - unzip
+    - zip
+    - git
+
+- name: start and enable ntp
+  service:
+    name: ntp
+    state: started
+    enabled: yes
+  when: ansible_os_family == "Debian"
+
+- name: add several users
+  user:
+    name: "{{ item }}"
+    state: present
+    groups: "root"
+  loop:
+   - testuser1
+   - testuser2
+
+- name: Deploy ntp conf on RedHat
+  template:
+    src: ntp_redhat_conf.j2
+    dest: "{{ntp_path}}"
+    backup: yes
+  when: ansible_os_family == "RedHat"
+  notify:
+    - Restart NTP service on RedHat
+
+- name: Deploy ntp conf on Debian
+  template:
+    src: ntp_debian_conf.j2
+    dest: "{{ntp_path}}"
+    backup: yes
+  when: ansible_os_family == "Debian"
+  notify:
+    - Restart NTP service on Debian

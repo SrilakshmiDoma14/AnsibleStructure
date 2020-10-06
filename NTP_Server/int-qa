@@ -1,0 +1,20 @@
+websrv01 ansible_host=172.31.14.133
+websrv02 ansible_host=172.31.8.209
+websrv03 ansible_host=172.31.13.170 ansible_user=ubuntu 
+dbsrv01 ansible_host=172.31.4.202
+
+[websrvgrp]
+websrv01
+websrv02
+websrv03
+
+[dbsrvgrp]
+dbsrv01
+
+[dc_arizona:children]
+websrvgrp
+dbsrvgrp
+
+[dc_arizona:vars]
+ansible_user=centos 
+ansible_ssh_private_key_file=./polar-key.pem

@@ -1,0 +1,7 @@
+---
+# defaults file for common-setup
+ntp_srv0: 0.europe.pool.ntp.org
+ntp_srv1: 1.europe.pool.ntp.org
+ntp_srv2: 2.europe.pool.ntp.org
+ntp_srv3: 3.europe.pool.ntp.org
+ntp_path: /etc/ntp.conf
