@@ -1,0 +1,30 @@
+---
+- name: Setup ntp service
+  hosts: all
+  tasks:
+  - name: Install NTP service on RedHat OS
+    yum:
+      name: ntp
+      state: present
+    when: ansible_os_family == "RedHat"
+
+  - name: start and enable ntp
+    service:
+      name: ntpd
+      state: started
+      enabled: yes
+    when: ansible_os_family == "RedHat"
+
+  - name: Install NTP service on Debian OS
+    apt:
+      name: ntp
+      state: present
+      update_cache: yes
+    when: ansible_os_family == "Debian"
+
+  - name: start and enable ntp
+    service:
+      name: ntp
+      state: started
+      enabled: yes
+    when: ansible_os_family == "Debian"
